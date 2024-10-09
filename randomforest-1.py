@@ -10,7 +10,7 @@ from openpyxl import load_workbook
 #读取数据
 df = pd.read_excel(r'0614-熔融 结晶 全反射 3类.xlsx')
 
-# print(df.iloc[:, :9])
+
 # df = df.drop(df.columns[0,1],axis=1)
 # df.to_excel(r'熔融 结晶 全反射 4类-1.xlsx')
 # X = df.drop(columns=['samples','classes'])
