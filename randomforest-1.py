@@ -30,11 +30,11 @@ X_scaled = scaler.fit_transform(X)
 # 归一化
 scaler = MinMaxScaler()
 X_normalized = scaler.fit_transform(X)
-print(X_normalized)
-print(X_scaled)
-"""
+# print(X_normalized)
+# print(X_scaled)
+
 # 将数据集分为训练集和测试集
-X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42)
+X_train, X_test, Y_train, Y_test = train_test_split(X_normalized, Y, test_size=0.3, random_state=42)
 
 # 3. 构建随机森林分类器模型
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
@@ -51,4 +51,3 @@ print(f"模型准确率: {accuracy:.2f}")
 # 进行 5 折交叉验证
 cv_scores = cross_val_score(clf, X, Y, cv=5)
 print(f"交叉验证的平均准确率: {cv_scores.mean():.2f}")
-"""
