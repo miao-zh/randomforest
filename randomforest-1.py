@@ -34,7 +34,7 @@ X_normalized = scaler.fit_transform(X)
 # print(X_scaled)
 
 # 将数据集分为训练集和测试集
-X_train, X_test, Y_train, Y_test = train_test_split(X_normalized, Y, test_size=0.3, random_state=42)
+X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y, test_size=0.3, random_state=42)
 
 # 3. 构建随机森林分类器模型
 clf = RandomForestClassifier(n_estimators=100, random_state=42)
