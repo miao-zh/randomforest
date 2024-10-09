@@ -6,6 +6,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import matplotlib
 from openpyxl import load_workbook
+from sklearn.model_selection import cross_val_score
 
 #读取数据
 df = pd.read_excel(r'0614-熔融 结晶 全反射 3类.xlsx')
@@ -36,3 +37,7 @@ Y_pred = clf.predict(X_test)
 # 5. 评估模型准确率
 accuracy = accuracy_score(Y_test, Y_pred)
 print(f"模型准确率: {accuracy:.2f}")
+
+# 进行 5 折交叉验证
+cv_scores = cross_val_score(clf, X, Y, cv=5)
+print(f"交叉验证的平均准确率: {cv_scores.mean():.2f}")
