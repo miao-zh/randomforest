@@ -8,9 +8,11 @@ import matplotlib
 from openpyxl import load_workbook
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
+from xgboost import XGBClassifier
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 #读取数据
-df = pd.read_excel(r'0614-熔融 结晶 全反射 3类.xlsx')
+df = pd.read_excel(r'0614-熔融 结晶 全反射 4类.xlsx')
 
 
 # df = df.drop(df.columns[0,1],axis=1)
@@ -37,7 +39,7 @@ X_normalized = scaler.fit_transform(X)
 X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y, test_size=0.3, random_state=42)
 
 # 3. 构建随机森林分类器模型
-clf = RandomForestClassifier(n_estimators=100, random_state=42)
+clf = RandomForestClassifier(n_estimators=500, random_state=42)
 # 训练模型
 clf.fit(X_train, Y_train)
 
@@ -48,6 +50,21 @@ Y_pred = clf.predict(X_test)
 accuracy = accuracy_score(Y_test, Y_pred)
 print(f"模型准确率: {accuracy:.2f}")
 
-# 进行 5 折交叉验证
-cv_scores = cross_val_score(clf, X, Y, cv=5)
-print(f"交叉验证的平均准确率: {cv_scores.mean():.2f}")
+# 计算混淆矩阵
+cm = confusion_matrix(Y_test, Y_pred)
+
+# 可视化混淆矩阵
+print("混淆矩阵：")
+print(cm)
+
+# # 进行 5 折交叉验证
+# cv_scores = cross_val_score(clf, X, Y, cv=5)
+# print(f"交叉验证的平均准确率: {cv_scores.mean():.2f}")
+"""
+#梯度提升决策树
+xgb = XGBClassifier()
+xgb.fit(X_train, Y_train)
+Y_pred_xgb = xgb.predict(X_test)
+accuracy_xgb = accuracy_score(Y_test, Y_pred_xgb)
+print(f"XGBoost模型准确率: {accuracy_xgb:.2f}")
+"""
