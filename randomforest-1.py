@@ -12,7 +12,7 @@ from xgboost import XGBClassifier
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
 #读取数据
-df = pd.read_excel(r'0614-熔融 结晶 全反射 4类.xlsx')
+df = pd.read_excel(r'0614-熔融 结晶 全反射-40 4类-类别标签修改.xlsx')
 
 
 # df = df.drop(df.columns[0,1],axis=1)
@@ -28,7 +28,7 @@ Y=df['classes']
 
 # 标准化
 scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
+X_standardized = scaler.fit_transform(X)
 # 归一化
 scaler = MinMaxScaler()
 X_normalized = scaler.fit_transform(X)
@@ -36,17 +36,26 @@ X_normalized = scaler.fit_transform(X)
 # print(X_scaled)
 
 # 将数据集分为训练集和测试集
-X_train, X_test, Y_train, Y_test = train_test_split(X_scaled, Y, test_size=0.3, random_state=42)
+X_train, X_test, Y_train, Y_test = train_test_split(X_standardized, Y, test_size=0.3, random_state=42, stratify=Y)
 
-# 3. 构建随机森林分类器模型
+print('Labels counts in Y:', np.bincount(Y))  # 原数据集中各分类标签出现次数 [24 24 24]
+print('Labels counts in Y_train:', np.bincount(Y_train))  # 训练集中各分类标签出现次数 [35 35 35]
+print('Labels counts in Y_test:', np.bincount(Y_test))   # 测试集中各分类标签出现次数 [ ]
+
+# 构建随机森林分类器模型
 clf = RandomForestClassifier(n_estimators=500, random_state=42)
 # 训练模型
 clf.fit(X_train, Y_train)
 
-# 4. 使用测试集进行预测
+# 使用测试集进行预测
 Y_pred = clf.predict(X_test)
 
-# 5. 评估模型准确率
+# 打印预测结果及模型评分
+print("test labels: ")
+print(Y_test)
+print("Predicted labels: ", Y_pred)
+print('Misclassified samples: %d' % (Y_test != Y_pred).sum())   # 输出错误分类的样本数
+# 评估模型准确率
 accuracy = accuracy_score(Y_test, Y_pred)
 print(f"模型准确率: {accuracy:.2f}")
 
