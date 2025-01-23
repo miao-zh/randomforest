@@ -12,7 +12,7 @@ from matplotlib.colors import ListedColormap
 
 
 #读取数据
-df = pd.read_excel(r'0614-熔融 结晶 全反射 3类-类别标签修改.xlsx')
+df = pd.read_excel(r'0614-熔融 结晶 全反射-40 2类-1.xlsx')
 
 #划分特征和类
 X = df.drop(columns=['samples','classes'])
@@ -37,15 +37,15 @@ def scale(x):
 # 标准化
 X_standardized = scale(X)
 
-#pca降维以方便可视化
-pca = PCA(n_components=2)
-X_pca=pca.fit_transform(X) # 降维后的结果
+# #pca降维以方便可视化
+# pca = PCA(n_components=2)
+# X_pca=pca.fit_transform(X_standardized) # 降维后的结果
 
 # 分类标签列表
 print('Class labels:', np.unique(Y))
 
 # 将数据集分为训练集和测试集
-X_train, X_test, Y_train, Y_test = train_test_split(X_pca, Y, test_size=0.3, random_state=42, stratify=Y)
+X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.3, random_state=42, stratify=Y)
 
 print('Labels counts in Y:', np.bincount(Y))  # 原数据集中各分类标签出现次数 [24 24 24]
 print('Labels counts in Y_train:', np.bincount(Y_train))  # 训练集中各分类标签出现次数 [35 35 35]
@@ -64,23 +64,24 @@ def plot_decision_regions(X, Y, classifier, test_idx=None, resolution=0.02):
 model = SVC(kernel='linear', C=1.0)
 model.fit(X_train, Y_train)
 
-# 创建网格以绘制决策边界
-xx, yy = np.meshgrid(np.linspace(-3, 3, 100), np.linspace(-3, 3, 100))
-Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
-Z = Z.reshape(xx.shape)
-
-# 绘制决策边界
-plt.figure(figsize=(10, 6))
-plt.contourf(xx, yy, Z, levels=np.linspace(Z.min(), Z.max(), 50), cmap='coolwarm', alpha=0.8)
-# 绘制训练数据点
-scatter = plt.scatter(X_train[:, 0], X_train[:, 1], c=Y_train, edgecolors='k', marker='o', s=100)
-plt.scatter(X_test[:, 0], X_test[:, 1], c='black', edgecolors='k', marker='x', s=100, label='Test data')
-plt.show()
+# # 创建网格以绘制决策边界
+# xx, yy = np.meshgrid(np.linspace(-3, 3, 100), np.linspace(-3, 3, 100))
+# Z = model.predict(np.c_[xx.ravel(), yy.ravel()])
+# Z = Z.reshape(xx.shape)
+#
+# # 绘制决策边界
+# plt.figure(figsize=(10, 6))
+# plt.contourf(xx, yy, Z, levels=np.linspace(Z.min(), Z.max(), 50), cmap='coolwarm', alpha=0.8)
+# # 绘制训练数据点
+# scatter = plt.scatter(X_train[:, 0], X_train[:, 1], c=Y_train, edgecolors='k', marker='o', s=100)
+# plt.scatter(X_test[:, 0], X_test[:, 1], c='black', edgecolors='k', marker='x', s=100, label='Test data')
+# plt.show()
 
 # 进行预测
 Y_pred = model.predict(X_test)
 
 # 打印预测结果及模型评分
+print("test labels:\n", Y_test)
 print("Predicted labels: ", Y_pred)
 print('Misclassified samples: %d' % (Y_test != Y_pred).sum())   # 输出错误分类的样本数
 #利用classifier.score（）分别计算训练集和测试集的准确率。

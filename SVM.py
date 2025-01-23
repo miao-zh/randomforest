@@ -10,7 +10,7 @@ from sklearn.metrics import RocCurveDisplay
 from sklearn.decomposition import PCA
 
 #读取数据
-df = pd.read_excel(r'0614-熔融 结晶 全反射 4类-类别标签修改.xlsx')
+df = pd.read_excel(r'0614-熔融 结晶 全反射-40 2类.xlsx')
 
 #划分特征和类
 X = df.drop(columns=['samples','classes'])
@@ -47,8 +47,6 @@ model.fit(X_train_standardized, Y_train)
 Y_pred = model.predict(X_test_standardized)
 
 # 打印预测结果
-print(df)
-# SS
-# print("\n分类报告：")
-# print(classification_report(Y_test, Y_pred))
-# print("准确率：", accuracy_SSscore(Y_test, Y_pred))
+print("\n分类报告：")
+print(classification_report(Y_test, Y_pred))
+print("准确率：", accuracy_score(Y_test, Y_pred))
